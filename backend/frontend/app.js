@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const nombre_cancion = document.getElementById("nombre_cancion").value;
     const tipo = document.getElementById("tipo").value;
 
-    const res = await fetch("http://localhost:3000/songs", {
+    // const res = await fetch("http://localhost:3000/songs", {
+    const res = await fetch("/songs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ cantante, nombre_cancion, tipo })
@@ -20,13 +21,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (res.ok) {
       form.reset();
       listarCanciones();
+    } else {
+      const error = await res.json();
+      console.error("Error al agregar canción:", error);
+      alert("Error al agregar canción");
     }
   });
 
   listarBtn.addEventListener("click", listarCanciones);
 
   async function listarCanciones() {
-    const res = await fetch("http://localhost:3000/songs");
+    // const res = await fetch("http://localhost:3000/songs");
+    const res = await fetch("/songs");
+    if (!res.ok) {
+      console.error("Error al listar canciones");
+      return;
+    }
     const songs = await res.json();
 
     // Limpia listas
@@ -55,7 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function borrarCancion(id) {
-    const res = await fetch(`http://localhost:3000/songs/${id}`, {
+    // const res = await fetch(`http://localhost:3000/songs/${id}`, {
+    const res = await fetch(`/songs/${id}`, {
       method: "DELETE"
     });
     console.log({res});
