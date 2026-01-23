@@ -26,33 +26,41 @@ Backend en **Node.js + Express + PostgreSQL**, frontend sencillo en **HTML/CSS/J
     npm install
 
 3. - Crea un archivo .env en la raíz con tus variables de entorno:
-    ```bash
-    DATABASE_URL=postgresql://usuario:password@localhost:5432/songsdb
+
+    ## ⚙️ Configuración de variables de entorno
+
+    El proyecto usa un archivo `.env` en la raíz. Ejemplo:
+
+    ```env
+    PGHOST=db
+    PGUSER=tuusuario
+    PGPASSWORD=tupassword
+    PGDATABASE=songsdb
+    PGPORT=5432
     PORT=3000
+    DATABASE_URL=postgresql://tuusuario:tupassword@db:5432/songsdb
 
-## 🛠️ Levantar el proyecto
 
-Opción A: Local sin Docker
-
-1. - Compila TypeScript:
-    ```bash
-    npx tsc
-
-2. - Arranca el servidor:
-    ```bash
-    node dist/server.js
-
-3. - Abre el frontend:
-    - Ve a frontend/index.html en tu navegador.
-    - El backend estará disponible en http://localhost:3000.
-
-Opción B: Con Docker Compose
+## 🐳 Levantar el proyecto con Docker Compos
 
 1. - Levanta los servicios:
     ```bash
     docker-compose up --build
+2. - Usa --no-cache si cambias dependencias o el Dockerfile
+    ```bash
+    docker-compose build --no-cache
 
-2. - El backend quedará corriendo en http://localhost:3000.
+3. - Levantar los servicios:
+    ```bash
+    docker-compose up
+
+4. - El backend quedará corriendo en http://localhost:3000.
+
+5. - El frontend quedará corriendo en http://localhost:8080.
+
+3. - Parar los servicios:
+    ```bash
+    docker-compose down
 
 ## 📋 Endpoints principales- GET /songs → Lista todas las canciones
 - POST /songs → Agrega una canción
