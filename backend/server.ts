@@ -2,7 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { Pool } from "pg";
 import dotenv from "dotenv";
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 const PORT = Number(process.env.PORT) || 3000;
 
@@ -10,14 +12,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Configuración de conexión a Postgres (usa variables de entorno)
-// const pool = new Pool({
-//   host: process.env.PGHOST,
-//   user: process.env.PGUSER,
-//   password: process.env.PGPASSWORD,
-//   database: process.env.PGDATABASE,
-//   port: Number(process.env.PGPORT),
-// });
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
