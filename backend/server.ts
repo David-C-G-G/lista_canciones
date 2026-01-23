@@ -1,18 +1,26 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { Pool } from "pg";
+import dotenv from "dotenv";
+dotenv.config();
+
+const PORT = Number(process.env.PORT) || 3000;
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 // Configuración de conexión a Postgres (usa variables de entorno)
+// const pool = new Pool({
+//   host: process.env.PGHOST,
+//   user: process.env.PGUSER,
+//   password: process.env.PGPASSWORD,
+//   database: process.env.PGDATABASE,
+//   port: Number(process.env.PGPORT),
+// });
 const pool = new Pool({
-  host: process.env.PGHOST,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  port: Number(process.env.PGPORT),
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 
 // Crear tabla si no existe
@@ -71,7 +79,7 @@ app.delete("/songs/:id", async (req: Request, res: Response) => {
 });
 
 // Arrancar servidor
-const PORT = 3000;
-app.listen(PORT, () => {
+// const PORT = 3000;
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Backend running on port ${PORT}`);
 });

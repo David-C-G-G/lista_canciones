@@ -28,9 +28,15 @@ services:
     container_name: songs-app-db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: songsdb
+      - PGHOST=${PGHOST}
+      - PGUSER=${PGUSER}
+      - PGPASSWORD=${PGPASSWORD}
+      - PGDATABASE=${PGDATABASE}
+      - PGPORT=${PGPORT}
+
+      # POSTGRES_USER: postgres
+      # POSTGRES_PASSWORD: postgres
+      # POSTGRES_DB: songsdb
     ports:
       - "5432:5432"
     volumes:

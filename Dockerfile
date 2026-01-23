@@ -1,5 +1,5 @@
 # Usa Node 18 en Alpine (más ligero)
-FROM node:18-alpine
+FROM node:18-alpine AS build
 
 # Directorio de trabajo dentro del contenedor
 WORKDIR /app/backend
@@ -8,13 +8,24 @@ WORKDIR /app/backend
 COPY backend/package*.json ./
 
 # Instalamos dependencias
-RUN npm install
+# RUN npm install
+RUN npm ci
 
 # Copiamos el resto del código fuente (incluye src y tsconfig.json)
 COPY backend/ .
 
 # Compilamos TypeScript dentro del contenedor
 RUN npx tsc
+
+# Etapa final (runtime)
+FROM node:18-alpine
+
+# Directorio de trabajo dentro del contenedor limpio
+WORKDIR /app/backend
+
+COPY --from=build /app/backend/dist ./dist
+COPY --from=build /app/backend/node_modules ./node_modules
+COPY backend/package*.json ./
 
 # Exponemos el puerto del backend
 EXPOSE 3000
