@@ -24,6 +24,7 @@ FROM node:18-alpine
 WORKDIR /app/backend
 
 COPY --from=build /app/backend/dist ./dist
+COPY backend/frontend ./frontend
 COPY --from=build /app/backend/node_modules ./node_modules
 COPY backend/package*.json ./
 

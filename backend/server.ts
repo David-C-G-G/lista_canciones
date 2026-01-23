@@ -75,10 +75,15 @@ app.delete("/songs/:id", async (req: Request, res: Response) => {
 });
 
 // --- Servir frontend ---
-app.use(express.static(path.join(__dirname, "../frontend")));
+const frontendPath = path.join(__dirname, "../frontend");
+app.use(express.static(frontendPath));
 app.get("/", (_req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
+// app.use(express.static(path.join(__dirname, "../frontend")));
+// app.get("/", (_req, res) => {
+//   res.sendFile(path.join(__dirname, "../frontend/index.html"));
+// });
 
 // Arrancar servidor
 // const PORT = 3000;
