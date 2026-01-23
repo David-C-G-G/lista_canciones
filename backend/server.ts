@@ -2,6 +2,8 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { Pool } from "pg";
 import dotenv from "dotenv";
+import path from "path";
+
 if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
@@ -70,6 +72,12 @@ app.delete("/songs/:id", async (req: Request, res: Response) => {
     console.error(err);
     res.status(500).json({ error: "Error al eliminar canción" });
   }
+});
+
+// --- Servir frontend ---
+app.use(express.static(path.join(__dirname, "../frontend")));
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
 // Arrancar servidor
