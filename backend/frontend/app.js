@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "❌";
       deleteBtn.style.marginLeft = "10px";
-      deleteBtn.addEventListener("click", () => borrarCancion(song.id));
+      // deleteBtn.addEventListener("click", () => borrarCancion(song.id));
       console.log({songId: song.id});
 
       li.appendChild(deleteBtn);
@@ -66,16 +66,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function borrarCancion(id) {
     // const res = await fetch(`http://localhost:3000/songs/${id}`, {
-  //   const res = await fetch(`/songs/${id}`, {
-  //     method: "DELETE"
-  //   });
-  //   console.log({res});
-  //   if (res.ok) {
-  //     listarCanciones(); // refresca listas
-  //   } else {
-  //     const error = await res.json();
-  //     console.error("Error al borrar canción:", error);
-  //     alert("Error al borrar canción");
-  //   }
-  // }
-});
+    const res = await fetch(`/songs/${id}`, {
+      method: "DELETE"
+    });
+    console.log({res});
+    if (res.ok) {
+      listarCanciones(); // refresca listas
+    } else {
+      const error = await res.json();
+      console.error("Error al borrar canción:", error);
+      alert("Error al borrar canción");
+    }
+  }
+}
+);
