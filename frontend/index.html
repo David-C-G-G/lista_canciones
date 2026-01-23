@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Songs App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Registro de Canciones</h1>
+
+  <!-- Contenedor principal en flex -->
+  <div class="container">
+    
+    <!-- Panel izquierdo -->
+    <div class="panel">
+      <h2>Canciones de Baile</h2>
+      <ul id="baile-list"></ul>
+    </div>
+
+    <!-- Formulario al centro -->
+    <div class="formulario">
+      <form id="song-form">
+        <label for="cantante">Cantante:</label>
+        <input type="text" id="cantante" required>
+
+        <label for="nombre_cancion">Nombre de canción:</label>
+        <input type="text" id="nombre_cancion" required>
+
+        <label for="tipo">Tipo:</label>
+        <select id="tipo" required>
+          <option value="karaoke">Karaoke</option>
+          <option value="baile">Baile</option>
+        </select>
+
+        <button type="submit">Agregar canción</button>
+        <button type="button" id="listar">Imprimir lista</button>
+      </form>
+      
+
+    </div>
+
+    <!-- Panel derecho -->
+    <div class="panel">
+      <h2>Canciones de Karaoke</h2>
+      <ul id="karaoke-list"></ul>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
