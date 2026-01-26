@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "❌";
       deleteBtn.style.marginLeft = "10px";
-      deleteBtn.addEventListener("click", () => borrarCancion(song.id));
+      //deleteBtn.addEventListener("click", () => borrarCancion(song.id));
       console.log({songId: song.id});
 
       li.appendChild(deleteBtn);
