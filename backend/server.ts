@@ -19,7 +19,16 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 
-// Crear tabla si no existe (ahora con columna url)
+// --- Función para normalizar texto ---
+function normalizarTexto(texto: string): string {
+  return texto
+    .toLowerCase()
+    .normalize("NFD")              // separa acentos
+    .replace(/[\u0300-\u036f]/g, "") // elimina acentos
+    .replace(/\s+/g, "");          // quita espacios
+}
+
+// Crear tabla si no existe (ahora con columna url y clave_normalizada)
 (async () => {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS songs (
@@ -28,7 +37,8 @@ const pool = new Pool({
       nombre_cancion TEXT NOT NULL,
       tipo TEXT NOT NULL,
       agregado_por TEXT NOT NULL,
-      url TEXT NOT NULL
+      url TEXT NOT NULL,
+      clave_normalizada TEXT NOT NULL
     )
   `);
 })();
@@ -43,9 +53,18 @@ app.post("/songs", async (req: Request, res: Response) => {
 
   const iniciales = `${nombre[0]}${apellido1[0]}${apellido2[0]}`.toUpperCase();
 
+  // Normalizar clave (cantante + canción)
+  const claveNormalizada = normalizarTexto(cantante + nombre_cancion);
+
+  // Verificar si ya existe
+  const existe = await pool.query("SELECT 1 FROM songs WHERE clave_normalizada = $1", [claveNormalizada]);
+  if ((existe.rowCount ?? 0) > 0) {
+    return res.status(400).json({ error: "⚠️ Esta canción ya está registrada para este autor" });
+  }
+
   const result = await pool.query(
-    "INSERT INTO songs (cantante, nombre_cancion, tipo, agregado_por, url) VALUES ($1, $2, $3, $4, $5) RETURNING id",
-    [cantante, nombre_cancion, tipo, iniciales, url]
+    "INSERT INTO songs (cantante, nombre_cancion, tipo, agregado_por, url, clave_normalizada) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+    [cantante, nombre_cancion, tipo, iniciales, url, claveNormalizada]
   );
 
   res.json({ id: result.rows[0].id, cantante, nombre_cancion, tipo, agregado_por: iniciales, url });
@@ -76,7 +95,7 @@ app.delete("/songs/:id", async (req: Request, res: Response) => {
 
 // --- Función auxiliar para mezclar por agregado_por ---
 function mezclarPorAgregadoPor(
-  songs: { id: number; cantante: string; nombre_cancion: string; tipo: string; agregado_por: string; url: string }[]
+  songs: { id: number; cantante: string; nombre_cancion: string; tipo: string; agregado_por: string; url: string; clave_normalizada: string }[]
 ) {
   const grupos: Record<string, typeof songs> = {};
   songs.forEach((song) => {

@@ -34,7 +34,7 @@ form.addEventListener("submit", async (e) => {
   } else {
     const error = await res.json();
     console.error("Error al agregar canción:", error);
-    alert("Error al agregar canción");
+    alert(error.error || "Error al agregar canción");
   }
 });
 
