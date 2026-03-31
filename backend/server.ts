@@ -19,36 +19,36 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 
-// Crear tabla si no existe
+// Crear tabla si no existe (ahora con columna url)
 (async () => {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS songs (
       id SERIAL PRIMARY KEY,
       cantante TEXT NOT NULL,
       nombre_cancion TEXT NOT NULL,
-      tipo TEXT NOT NULL
+      tipo TEXT NOT NULL,
+      agregado_por TEXT NOT NULL,
+      url TEXT NOT NULL
     )
   `);
 })();
 
 // Ruta para insertar canciones
 app.post("/songs", async (req: Request, res: Response) => {
-  const { cantante, nombre_cancion, tipo } = req.body as {
-    cantante: string;
-    nombre_cancion: string;
-    tipo: string;
-  };
+  const { cantante, nombre_cancion, tipo, nombre, apellido1, apellido2, url } = req.body;
 
-  if (!cantante || !nombre_cancion || !tipo) {
-    return res.status(400).json({ error: "cantante, nombre_cancion y tipo son requeridos" });
+  if (!cantante || !nombre_cancion || !tipo || !nombre || !apellido1 || !apellido2 || !url) {
+    return res.status(400).json({ error: "todos los campos son requeridos" });
   }
 
+  const iniciales = `${nombre[0]}${apellido1[0]}${apellido2[0]}`.toUpperCase();
+
   const result = await pool.query(
-    "INSERT INTO songs (cantante, nombre_cancion, tipo) VALUES ($1, $2, $3) RETURNING id",
-    [cantante, nombre_cancion, tipo]
+    "INSERT INTO songs (cantante, nombre_cancion, tipo, agregado_por, url) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+    [cantante, nombre_cancion, tipo, iniciales, url]
   );
 
-  res.json({ id: result.rows[0].id, cantante, nombre_cancion, tipo });
+  res.json({ id: result.rows[0].id, cantante, nombre_cancion, tipo, agregado_por: iniciales, url });
 });
 
 // Ruta para listar canciones
@@ -74,19 +74,61 @@ app.delete("/songs/:id", async (req: Request, res: Response) => {
   }
 });
 
+// --- Función auxiliar para mezclar por agregado_por ---
+function mezclarPorAgregadoPor(
+  songs: { id: number; cantante: string; nombre_cancion: string; tipo: string; agregado_por: string; url: string }[]
+) {
+  const grupos: Record<string, typeof songs> = {};
+  songs.forEach((song) => {
+    if (!grupos[song.agregado_por]) grupos[song.agregado_por] = [];
+    grupos[song.agregado_por].push(song);
+  });
+
+  Object.keys(grupos).forEach((key) => {
+    grupos[key] = grupos[key].sort(() => Math.random() - 0.5);
+  });
+
+  const ordenFinal: typeof songs = [];
+  let hayCanciones = true;
+
+  while (hayCanciones) {
+    hayCanciones = false;
+    for (const key of Object.keys(grupos)) {
+      if (grupos[key].length > 0) {
+        const song = grupos[key].shift()!;
+        if (ordenFinal.length === 0 || ordenFinal[ordenFinal.length - 1].agregado_por !== song.agregado_por) {
+          ordenFinal.push(song);
+          hayCanciones = true;
+        } else {
+          grupos[key].push(song);
+        }
+      }
+    }
+  }
+
+  return ordenFinal;
+}
+
+// --- Mezclar Karaoke ---
+app.get("/songs/random/karaoke", async (_req: Request, res: Response) => {
+  const result = await pool.query("SELECT * FROM songs WHERE tipo = 'karaoke'");
+  res.json(mezclarPorAgregadoPor(result.rows));
+});
+
+// --- Mezclar Baile ---
+app.get("/songs/random/baile", async (_req: Request, res: Response) => {
+  const result = await pool.query("SELECT * FROM songs WHERE tipo = 'baile'");
+  res.json(mezclarPorAgregadoPor(result.rows));
+});
+
 // --- Servir frontend ---
 const frontendPath = path.join(__dirname, "../frontend");
 app.use(express.static(frontendPath));
 app.get("/", (_req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
-// app.use(express.static(path.join(__dirname, "../frontend")));
-// app.get("/", (_req, res) => {
-//   res.sendFile(path.join(__dirname, "../frontend/index.html"));
-// });
 
 // Arrancar servidor
-// const PORT = 3000;
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Backend running on port ${PORT}`);
 });
