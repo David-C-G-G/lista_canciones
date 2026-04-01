@@ -18,7 +18,11 @@ h1 {
   margin: 20px;
 }
 
-.top-section .panel {
+/* Agrupador de paneles: coloca normal + mezclada en columna */
+.panel-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   flex: 1;
   margin: 0 10px;
 }
@@ -38,8 +42,8 @@ h1 {
   border-radius: 8px;
   background: #fff;
   padding: 10px;
-  max-height: 400px;   /* altura fija */
-  overflow-y: auto;    /* scroll vertical */
+  max-height: 200px;   /* altura más compacta */
+  overflow-y: auto;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
