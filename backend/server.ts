@@ -140,6 +140,26 @@ app.get("/songs/random/baile", async (_req: Request, res: Response) => {
   res.json(mezclarPorAgregadoPor(result.rows));
 });
 
+// --- Buscar por autor ---
+app.get("/songs/search/autor/:autor", async (req: Request, res: Response) => {
+  const autor = normalizarTexto(req.params.autor);
+
+  const result = await pool.query("SELECT * FROM songs");
+  const filtrados = result.rows.filter(song => normalizarTexto(song.cantante).includes(autor));
+
+  res.json(filtrados);
+});
+
+// --- Buscar por título ---
+app.get("/songs/search/titulo/:titulo", async (req: Request, res: Response) => {
+  const titulo = normalizarTexto(req.params.titulo);
+
+  const result = await pool.query("SELECT * FROM songs");
+  const filtrados = result.rows.filter(song => normalizarTexto(song.nombre_cancion).includes(titulo));
+
+  res.json(filtrados);
+});
+
 // --- Servir frontend ---
 const frontendPath = path.join(__dirname, "../frontend");
 app.use(express.static(frontendPath));

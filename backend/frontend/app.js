@@ -10,6 +10,11 @@ const mezclarBaileList = document.getElementById("mezclar-baile-list");
 
 const player = document.getElementById("song-player");
 
+// --- Elementos de búsqueda ---
+const buscarAutorBtn = document.getElementById("btn-buscar-autor");
+const buscarTituloBtn = document.getElementById("btn-buscar-titulo");
+const resultadoBusqueda = document.getElementById("resultado-busqueda");
+
 // --- Agregar canción ---
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -124,6 +129,51 @@ mezclarBaileBtn.addEventListener("click", async () => {
     mezclarBaileList.appendChild(li);
   });
 });
+
+// --- Buscar por autor ---
+buscarAutorBtn.addEventListener("click", async () => {
+  const autor = document.getElementById("buscar-autor").value;
+  if (!autor) {
+    alert("Ingresa un autor para buscar");
+    return;
+  }
+  const res = await fetch(`/songs/search/autor/${autor}`);
+  if (!res.ok) {
+    alert("Error al buscar por autor");
+    return;
+  }
+  const songs = await res.json();
+  mostrarResultadosBusqueda(songs);
+});
+
+// --- Buscar por título ---
+buscarTituloBtn.addEventListener("click", async () => {
+  const titulo = document.getElementById("buscar-titulo").value;
+  if (!titulo) {
+    alert("Ingresa un título para buscar");
+    return;
+  }
+  const res = await fetch(`/songs/search/titulo/${titulo}`);
+  if (!res.ok) {
+    alert("Error al buscar por título");
+    return;
+  }
+  const songs = await res.json();
+  mostrarResultadosBusqueda(songs);
+});
+
+// --- Mostrar resultados de búsqueda ---
+function mostrarResultadosBusqueda(songs) {
+  resultadoBusqueda.innerHTML = "";
+  if (songs.length === 0) {
+    resultadoBusqueda.innerHTML = "<li>No se encontraron canciones</li>";
+    return;
+  }
+  songs.forEach(song => {
+    const li = crearElementoCancion(song);
+    resultadoBusqueda.appendChild(li);
+  });
+}
 
 // Inicializar lista al cargar
 listarCanciones();
