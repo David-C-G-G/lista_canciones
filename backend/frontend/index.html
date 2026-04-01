@@ -8,89 +8,82 @@
 <body>
   <h1>Registro de Canciones</h1>
 
-  <div class="container">
+  <!-- Sección superior: listas a los costados y reproductor al centro -->
+  <div class="top-section">
     <!-- Panel izquierdo -->
-    <div class="panel-group">
-      <div class="panel">
-        <h2>Canciones de Baile</h2>
-        <ul id="baile-list"></ul>
-      </div>
-      <div class="panel baile-random">
-        <h2>Lista Baile Mezclada</h2>
-        <ul id="mezclar-baile-list"></ul>
-      </div>
+    <div class="panel">
+      <h2>Canciones de Baile</h2>
+      <ul id="baile-list"></ul>
+      <h2>Lista Baile Mezclada</h2>
+      <ul id="mezclar-baile-list"></ul>
     </div>
 
-    <!-- Formulario al centro -->
-    <div class="formulario">
-      <form id="song-form">
-        <label for="cantante">Cantante:</label>
-        <input type="text" id="cantante" required>
-
-        <label for="nombre_cancion">Nombre de canción:</label>
-        <input type="text" id="nombre_cancion" required>
-
-        <label for="tipo">Tipo:</label>
-        <select id="tipo" required>
-          <option value="karaoke">Karaoke</option>
-          <option value="baile">Baile</option>
-        </select>
-
-        <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="text" id="apellido1" placeholder="Primer apellido" required>
-        <input type="text" id="apellido2" placeholder="Segundo apellido" required>
-
-        <!-- Nuevo campo para URL de YouTube -->
-        <label for="url">URL de YouTube:</label>
-        <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=..." required>
-
-        <button type="submit">Agregar canción</button>
-        <button type="button" id="listar">Imprimir lista</button>
-      </form>
-
-      <!-- Botones random debajo del formulario -->
-      <div class="random-buttons">
-        <button type="button" id="mezclar-baile">Random B</button>
-        <button type="button" id="mezclar-karaoke">Random K</button>
-      </div>
-
-      <!-- Reproductor YouTube -->
-      <div class="player-container">
-        <h2>Reproductor</h2>
-        <iframe id="song-player" width="560" height="315"
-          src=""
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
-
-      <!-- Apartado de búsqueda -->
-      <div class="busqueda">
-        <h2>Buscar Canción</h2>
-        <label for="buscar-autor">Por autor:</label>
-        <input type="text" id="buscar-autor" placeholder="Nombre del autor">
-        <button type="button" id="btn-buscar-autor">Buscar Autor</button>
-
-        <label for="buscar-titulo">Por título:</label>
-        <input type="text" id="buscar-titulo" placeholder="Título de la canción">
-        <button type="button" id="btn-buscar-titulo">Buscar Título</button>
-
-        <h3>Resultados</h3>
-        <ul id="resultado-busqueda"></ul>
-      </div>
+    <!-- Reproductor al centro -->
+    <div class="player-container">
+      <!-- <h2>Reproductor</h2> -->
+      <iframe id="song-player" width="560" height="315"
+        src=""
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
     </div>
 
     <!-- Panel derecho -->
-    <div class="panel-group">
-      <div class="panel">
-        <h2>Canciones de Karaoke</h2>
-        <ul id="karaoke-list"></ul>
-      </div>
-      <div class="panel karaoke-random">
-        <h2>Lista Karaoke Mezclada</h2>
-        <ul id="mezclar-karaoke-list"></ul>
-      </div>
+    <div class="panel">
+      <h2>Canciones de Karaoke</h2>
+      <ul id="karaoke-list"></ul>
+      <h2>Lista Karaoke Mezclada</h2>
+      <ul id="mezclar-karaoke-list"></ul>
+    </div>
+  </div>
+
+  <!-- Formulario y búsqueda debajo -->
+  <div class="formulario">
+    <form id="song-form">
+      <label for="cantante">Cantante:</label>
+      <input type="text" id="cantante" required>
+
+      <label for="nombre_cancion">Nombre de canción:</label>
+      <input type="text" id="nombre_cancion" required>
+
+      <label for="tipo">Tipo:</label>
+      <select id="tipo" required>
+        <option value="karaoke">Karaoke</option>
+        <option value="baile">Baile</option>
+      </select>
+
+      <input type="text" id="nombre" placeholder="Nombre" required>
+      <input type="text" id="apellido1" placeholder="Primer apellido" required>
+      <input type="text" id="apellido2" placeholder="Segundo apellido" required>
+
+      <!-- Nuevo campo para URL de YouTube -->
+      <label for="url">URL de YouTube:</label>
+      <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=..." required>
+
+      <button type="submit">Agregar canción</button>
+      <button type="button" id="listar">Imprimir lista</button>
+    </form>
+
+    <!-- Botones random debajo del formulario -->
+    <div class="random-buttons">
+      <button type="button" id="mezclar-baile">Random B</button>
+      <button type="button" id="mezclar-karaoke">Random K</button>
+    </div>
+
+    <!-- Apartado de búsqueda -->
+    <div class="busqueda">
+      <h2>Buscar Canción</h2>
+      <label for="buscar-autor">Por autor:</label>
+      <input type="text" id="buscar-autor" placeholder="Nombre del autor">
+      <button type="button" id="btn-buscar-autor">Buscar Autor</button>
+      <br>
+      <label for="buscar-titulo">Por título:</label>
+      <input type="text" id="buscar-titulo" placeholder="Título de la canción">
+      <button type="button" id="btn-buscar-titulo">Buscar Título</button>
+
+      <h3>Resultados</h3>
+      <ul id="resultado-busqueda"></ul>
     </div>
   </div>
 
