@@ -6,6 +6,74 @@ body {
   padding: 0;
 }
 
+/* Tema Noche Tokyo Night */
+body.night {
+  background-color: #1a1b26;
+  color: #c0caf5;
+}
+
+body.night .player-container {
+  background: #24283b;
+  border: 2px solid #7aa2f7;
+  box-shadow: 0 0 12px #7aa2f7;
+}
+
+body.night .panel {
+  background: #24283b;
+  border: 1px solid #3b4261;
+  box-shadow: inset 0 0 8px rgba(122,162,247,0.3);
+}
+
+body.night h2 {
+  background: #1a1b26;
+  color: #7aa2f7;
+  font-weight: bold;
+  /* text-shadow: 0 0 5px #432c6e; */
+  text-shadow: none;
+  border-bottom: 1px solid #3b4261 ;
+}
+
+body.night li {
+  background: #1f2335;
+  color: #c0caf5;
+  border: 1px solid #3b4261;
+}
+
+body.night li button {
+  background: #f7768e;
+  color: #fff;
+  box-shadow: 0 0 6px #f7768e;
+}
+
+body.night li button:hover {
+  background: #c53b53;
+}
+
+body.night .formulario form,
+body.night .busqueda {
+  background: #24283b;
+  color: #c0caf5;
+  border: 1px solid #3b4261;
+}
+
+body.night input,
+body.night select {
+  background: #1f2335;
+  color: #c0caf5;
+  border: 1px solid #3b4261;
+}
+
+body.night button {
+  background: #7aa2f7;
+  color: #fff;
+  box-shadow: 0 0 8px #7aa2f7;
+}
+
+body.night button:hover {
+  background: #5a7bd5;
+}
+
+
 h1 {
   margin-top: 20px;
 }
@@ -27,31 +95,76 @@ h1 {
   margin: 0 10px;
 }
 
-.player-container {
+.player-container .formulario {
+  margin-top: 20px;
+  max-width: 100%;
+  text-align: left;
+}
+
+/* .player-container {
   flex: 2;
   text-align: center;
   background: #fff;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  max-width: 500px; 
+  margin: 0 auto; 
+} */
+.player-container {
+  flex: 2;
+  text-align: center;
+  background: linear-gradient(180deg, #ff4d4d, #ffcc00);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  max-width: 600px; 
+  margin: 0 auto;
+  border: 4px solid #333; 
 }
-
 /* Panel principal y random con mismo estilo */
-.panel {
+/* .panel {
   border: 1px solid #ccc;
   border-radius: 8px;
   background: #fff;
   padding: 10px;
-  max-height: 200px;   /* altura más compacta */
+  height: 300px;  
   overflow-y: auto;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+} */
+.panel {
+  border: px solid #333;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fdfdfd, #e0e0e0);
+  padding: 10px;
+  height: 300px;   /* altura más compacta */
+  overflow-y: auto;
+  box-shadow: inset 0 0 10px rgba(255,255,0,0.4), 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .panel h2 {
+  font-family: "Impact", sans-serif;
+  font-size: 18px;
+  text-align: center;
+  background: #333;
+  color: #ffcc00;
+  padding: 8px;
+  border-radius: 8px; 
+  position:sticky; 
+  top:0; 
+  z-index: 1;  
+}
+/* .panel h2 {
   margin-top: 0;
   font-size: 16px;
   text-align: left;
-}
+  background: #fff;
+  position:sticky; 
+  top:0; 
+  padding: 5px; 
+  z-index: 1; 
+  border-bottom: 1px solid #ccc; 
+} */
 
 /* Diferenciar colores de random */
 .baile-random {
@@ -98,10 +211,10 @@ li button:hover {
 }
 
 /* Formulario debajo */
-.formulario {
+/* .formulario {
   margin: 20px auto;
-  max-width: 600px;
-}
+  max-width: 480px;
+} */
 
 .formulario form {
   display: flex;
@@ -112,6 +225,8 @@ li button:hover {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   text-align: left;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .formulario label {
@@ -128,17 +243,32 @@ li button:hover {
   font-size: 14px;
 }
 
-.formulario button {
+/* .formulario button {
   background-color: #3498db;
   color: white;
   border: none;
   cursor: pointer;
   font-weight: bold;
+} */
+.formulario button, .random-buttons button {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 8px #ff4d4d, 0 0 12px #ffcc00;
+  transition: transform 0.2s;
 }
 
-.formulario button:hover {
-  background-color: #2980b9;
+.formulario button:hover, .random-buttons button:hover {
+  transform: scale(1.05);
+  background: #ff1a1a;
 }
+/* .formulario button:hover {
+  background-color: #2980b9;
+} */
 
 /* Botones random debajo del formulario */
 .random-buttons {
@@ -169,4 +299,56 @@ li button:hover {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   text-align: left;
+}
+
+/* tema del boton dia y noche */
+.theme-toggle {
+  margin: 15px;
+}
+
+.switch {
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+  background: #ccc;
+  border-radius: 30px;
+  position: relative;
+  cursor: pointer;
+}
+
+.switch::after {
+  content: "";
+  width: 26px;
+  height: 26px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+#toggle-theme {
+  display: none;
+}
+
+#toggle-theme:checked + .switch::after {
+  left: 32px; /* 🔽 mueve el círculo a la derecha */
+  background: #7aa2f7;
+}
+
+.sun, .moon {
+  position: absolute;
+  top: 4px;
+  font-size: 18px;
+}
+
+.sun {
+  left: 8px;
+  color: #f7768e;
+}
+
+.moon {
+  right: 8px;
+  color: #bb9af7;
 }

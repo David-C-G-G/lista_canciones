@@ -81,7 +81,34 @@ function crearElementoCancion(song) {
   // Reproducir al hacer click
   li.addEventListener("click", () => {
     if (song.url) {
-      player.src = song.url.replace("watch?v=", "embed/");
+      let videoId = null;
+
+      // aqui se hace la conversion si es un enlace corto de YouTube
+      if (song.url.includes("youtu.be/")) {
+        // const videoId = videoId.split("youtu.be/")[1].split("?")[0];
+        // videoId = `https://www.youtube.com/embed/${videoId}`;
+        videoId = song.url.split("youtu.be/")[1].split("?")[0];
+      }
+
+      // si es un link normal con watch?v= se convierte a embed
+      if(song.url.includes("watch?v=")) {
+        // const videoId = videoId.split("watch?v=")[1].split("&")[0];
+        // videoId = `https://www.youtube.com/embed/${videoId}`;
+        videoId = song.url.split("watch?v=")[1].split("&")[0];
+      }
+
+      // si ya viene en formato embed se deja igual
+      if(song.url.includes("/embed/")) {
+        videoId = song.url.split("embed/")[1].split("?")[0];
+      }
+
+      // actualizar el componente lite-youtube con el nuevo videoId
+      const player = document.getElementById("song-player");
+      player.setAttribute("videoid", videoId);
+      player.setAttribute("videotitle", song.nombre_cancion);
+      // player.src = videoId;
+    } else {
+      alert("No hay URL para reproducir esta canción");
     }
   });
 
@@ -174,6 +201,35 @@ function mostrarResultadosBusqueda(songs) {
     resultadoBusqueda.appendChild(li);
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleCheckbox = document.getElementById("toggle-theme");
+  const body = document.body;
+
+  // Tema inicial: Día
+  body.classList.add("night");
+  toggleCheckbox.checked = true;
+
+  // toggleBtn.addEventListener("click", () => {
+  //   if (body.classList.contains("day")) {
+  //     body.classList.remove("day");
+  //     body.classList.add("night");
+  //   } else {
+  //     body.classList.remove("night");
+  //     body.classList.add("day");
+  //   }
+  // });
+  toggleCheckbox.addEventListener("change", () => {
+    if (toggleCheckbox.checked) {
+      body.classList.remove("day");
+      body.classList.add("night");
+    } else {
+      body.classList.remove("night");
+      body.classList.add("day");
+    }
+  });
+});
+
 
 // Inicializar lista al cargar
 listarCanciones();
