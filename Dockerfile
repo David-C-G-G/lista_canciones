@@ -8,7 +8,6 @@ WORKDIR /app/backend
 COPY backend/package*.json ./
 
 # Instalamos dependencias
-# RUN npm install
 RUN npm ci
 
 # Copiamos el resto del código fuente (incluye src y tsconfig.json)
@@ -23,10 +22,17 @@ FROM node:18-alpine
 # Directorio de trabajo dentro del contenedor limpio
 WORKDIR /app/backend
 
+# Copiamos el backend compilado y dependencias
 COPY --from=build /app/backend/dist ./dist
-COPY backend/frontend ./frontend
 COPY --from=build /app/backend/node_modules ./node_modules
 COPY backend/package*.json ./
+
+# 👇 Copiamos el frontend en la ruta correcta
+WORKDIR /app
+COPY frontend ./frontend
+
+# Volvemos al backend como directorio de trabajo
+WORKDIR /app/backend
 
 # Exponemos el puerto del backend
 EXPOSE 3000

@@ -161,7 +161,7 @@ app.get("/songs/search/titulo/:titulo", async (req: Request, res: Response) => {
 });
 
 // --- Servir frontend ---
-const frontendPath = path.join(__dirname, "../frontend");
+const frontendPath = path.join(__dirname, "../../frontend");
 app.use(express.static(frontendPath));
 app.get("/", (_req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));

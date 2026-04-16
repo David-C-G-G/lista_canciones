@@ -68,5 +68,15 @@ Backend en **Node.js + Express + PostgreSQL**, frontend sencillo en **HTML/CSS/J
 
 ## 👨‍💻 AutorProyecto creado por David C.G.G.
 
+## NOTA: si necesitas compilar el backend usa en una terminal el siguiente comando
+- dentro de la carpeta backend abre la terminal y escribe: 
+
+```bash
+ npx tsc
+
+Esto genererará los archivos compilados en backend/dist
+
+
+
 
 
