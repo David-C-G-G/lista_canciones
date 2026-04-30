@@ -6,18 +6,20 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="rocola.png">
 
-  <!-- link para youtube-lite -->
+  <!-- Componente lite-youtube (ya no lo usamos para el reproductor principal) -->
   <script type="module" src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1/lite-youtube.min.js"></script>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
   <h1>Canta - Baila - Canta</h1>
-  <!-- <button id="toggle-theme">Cambiar Tema Día/Noche</button> -->
   <div class="theme-toggle">
-  <input type="checkbox" id="toggle-theme">
-  <label for="toggle-theme" class="switch">
-    <span class="sun">☀️</span>
-    <span class="moon">🌙</span>
-  </label>
+    <input type="checkbox" id="toggle-theme">
+    <label for="toggle-theme" class="switch">
+      <span class="sun">☀️</span>
+      <span class="moon">🌙</span>
+    </label>
   </div>
 
   <!-- Sección superior: listas a los costados y reproductor al centro -->
@@ -36,8 +38,8 @@
 
     <!-- Reproductor + formulario al centro -->
     <div class="player-container">
-      <!-- Lite YouTube component -->
-      <lite-youtube id="song-player" videoid="E9p-9SAHs58" videotitle="Canción seleccionada"></lite-youtube>
+      <!-- Contenedor del reproductor YouTube -->
+      <div id="song-player"></div>
 
       <!-- Formulario justo debajo del reproductor -->
       <div class="formulario">
@@ -101,6 +103,30 @@
       </div>
     </div>
   </div>
+
+  <!-- Script global para inicializar el reproductor -->
+  <script>
+    function onYouTubeIframeAPIReady() {
+      window.player = new YT.Player("song-player", {
+        videoId: window.videoInicial || "", // empieza vacío
+        events: {
+          'onStateChange': function(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+              // Llamar a la función reproducirSiguiente de reproductor.js
+              if(typeof window.reproducirSiguiente === "function") {
+                window.reproducirSiguiente();
+              }
+              // import("./reproductor.js").then(mod => {
+              //   if (mod && typeof mod.reproducirSiguiente === "function") {
+              //     mod.reproducirSiguiente();
+              //   }
+              // });
+            }
+          }
+        }
+      });
+    }
+  </script>
 
   <script type="module" src="app.js"></script>
 </body>

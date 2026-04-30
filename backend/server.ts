@@ -57,11 +57,21 @@ app.post("/songs", async (req: Request, res: Response) => {
   const claveNormalizada = normalizarTexto(cantante + nombre_cancion);
 
   // Verificar si ya existe
-  const existe = await pool.query("SELECT 1 FROM songs WHERE clave_normalizada = $1", [claveNormalizada]);
+  // const existe = await pool.query("SELECT 1 FROM songs WHERE clave_normalizada = $1", [claveNormalizada]);
+  // if ((existe.rowCount ?? 0) > 0) {
+  //   return res.status(400).json({ error: "⚠️ Esta canción ya está registrada para este autor" });
+  // }
+
+  // --- VALIDACION DE TIPO PARA NO REPETIR EN MISMO TIPO ---
+  const existe = await pool.query(
+    "SELECT 1 FROM songs WHERE clave_normalizada = $1 AND tipo = $2",
+    [claveNormalizada, tipo]
+  );
   if ((existe.rowCount ?? 0) > 0) {
-    return res.status(400).json({ error: "⚠️ Esta canción ya está registrada para este autor" });
+    return res.status(400).json({ error: "⚠️ Esta canción ya está registrada para este tipo" });
   }
 
+  // Insertar sino existe
   const result = await pool.query(
     "INSERT INTO songs (cantante, nombre_cancion, tipo, agregado_por, url, clave_normalizada) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
     [cantante, nombre_cancion, tipo, iniciales, url, claveNormalizada]

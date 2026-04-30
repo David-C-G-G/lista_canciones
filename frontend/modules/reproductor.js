@@ -15,8 +15,12 @@ function extraerVideoId(url) {
   return videoId;
 }
 
-// --- Inicializar reproductor ---
-export function inicializarReproductor(song) {
+// --- Estado interno del reproductor ---
+let listaActiva = [];
+let indiceActual = 0;
+
+// --- Inicializar reproductor con una canción ---
+export function inicializarReproductor(song, lista = [], indice = 0) {
   if (!song.url) {
     alert("No hay URL para reproducir esta canción");
     return;
@@ -28,7 +32,34 @@ export function inicializarReproductor(song) {
     return;
   }
 
-  const player = document.getElementById("song-player");
-  player.setAttribute("videoid", videoId);
-  player.setAttribute("videotitle", song.nombre_cancion);
+  // Guardar lista activa y posición actual
+  listaActiva = lista;
+  indiceActual = indice;
+
+  const player = window.player; // ✅ usamos el player global creado en index.html
+
+  if (player && typeof player.loadVideoById === "function") {
+    player.loadVideoById(videoId);
+  } else {
+    console.warn("El reproductor aún no está listo, se inicializará con la API.");
+    window.videoInicial = videoId;
+  }
+}
+
+// --- Reproducir siguiente canción automáticamente ---
+export function reproducirSiguiente() {
+  indiceActual++;
+  if (indiceActual < listaActiva.length) {
+    inicializarReproductor(listaActiva[indiceActual], listaActiva, indiceActual);
+  } else {
+    console.log("Fin de la lista activa");
+  }
+}
+window.reproducirSiguiente = reproducirSiguiente;  // Exponer función globalmente para el evento de YouTube
+
+// --- Detectar fin de canción con YouTube API ---
+export function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.ENDED) {
+    reproducirSiguiente();
+  }
 }

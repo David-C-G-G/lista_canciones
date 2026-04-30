@@ -1,3 +1,5 @@
+import { inicializarReproductor } from "./reproductor.js";
+
 // --- Mezclar Karaoke ---
 export async function mezclarKaraoke(crearElementoCancion) {
   const res = await fetch("/songs/random/karaoke");
@@ -10,8 +12,12 @@ export async function mezclarKaraoke(crearElementoCancion) {
   const mezclarKaraokeList = document.getElementById("mezclar-karaoke-list");
   mezclarKaraokeList.innerHTML = "";
 
-  songs.forEach(song => {
+  songs.forEach((song, i) => {
     const li = crearElementoCancion(song);
+    // evento de click para reproducir y avanzar en automatico
+    li.addEventListener("click", () => {
+      inicializarReproductor(song, songs, i);
+    });
     mezclarKaraokeList.appendChild(li);
   });
 }
@@ -28,8 +34,12 @@ export async function mezclarBaile(crearElementoCancion) {
   const mezclarBaileList = document.getElementById("mezclar-baile-list");
   mezclarBaileList.innerHTML = "";
 
-  songs.forEach(song => {
+  songs.forEach((song, i) => {
     const li = crearElementoCancion(song);
+    // evento de click para reproducir y avanzar en automatico
+    li.addEventListener("click", () => {
+      inicializarReproductor(song, songs, i);
+    });
     mezclarBaileList.appendChild(li);
   });
 }

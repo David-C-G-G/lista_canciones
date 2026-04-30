@@ -1,3 +1,5 @@
+import { inicializarReproductor } from "./reproductor.js";
+
 // --- Listar canciones ---
 export async function listarCanciones(crearElementoCancion) {
   const res = await fetch("/songs");
@@ -9,13 +11,24 @@ export async function listarCanciones(crearElementoCancion) {
   karaokeList.innerHTML = "";
   baileList.innerHTML = "";
 
-  songs.forEach(song => {
+  // --- FUNCIONALIDAD ACTUAL ---
+  // Filtramos primero por tipo y luego recorremos con índice propio
+  const karaokeSongs = songs.filter(s => s.tipo && s.tipo.toLowerCase() === "karaoke");
+  karaokeSongs.forEach((song, i) => {
     const li = crearElementoCancion(song);
-    if (song.tipo.toLowerCase() === "karaoke") {
-      karaokeList.appendChild(li);
-    } else if (song.tipo.toLowerCase() === "baile") {
-      baileList.appendChild(li);
-    }
+    li.addEventListener("click", () => {
+      inicializarReproductor(song, karaokeSongs, i);
+    });
+    karaokeList.appendChild(li);
+  });
+
+  const baileSongs = songs.filter(s => s.tipo && s.tipo.toLowerCase() === "baile");
+  baileSongs.forEach((song, i) => {
+    const li = crearElementoCancion(song);
+    li.addEventListener("click", () => {
+      inicializarReproductor(song, baileSongs, i);
+    });
+    baileList.appendChild(li);
   });
 }
 

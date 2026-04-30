@@ -352,3 +352,28 @@ li button:hover {
   right: 8px;
   color: #bb9af7;
 }
+
+/* Ajustes específicos para el reproductor YouTube */
+/* Contenedor del reproductor: mantiene proporción 16:9 */
+#song-player {
+  /* position: relative; */
+  width: 100%;
+  max-width: 560px;   /* ancho máximo */
+  margin: 0 auto;     /* centrado */
+  /* padding-top: 56.25%; */
+  /* overflow: hidden; */
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+}
+
+/* El iframe ocupa todo el contenedor */
+#song-player iframe {
+  /* position: absolute;
+  top: 0;
+  left: 0; */
+  width: 100%;
+  height: 315px;
+  border: none;
+  border-radius: 12px;
+}
+
